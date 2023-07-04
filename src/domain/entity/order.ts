@@ -5,6 +5,7 @@ export default class Order {
     _id: string;
     _customerId: string;
     _items: OrderItem[];
+    _totalOrder: number = 0;
 
     constructor(id: string, customerId: string, items: OrderItem[]) {
         this._id = id;
@@ -39,6 +40,14 @@ export default class Order {
 
     get items(): OrderItem[] {
         return this._items;
+    }
+
+    get totalOrder(): number {
+        return this.total();
+    }
+
+    changeItems(items: OrderItem[]) {
+        this._items = items;
     }
 
     total(): number {

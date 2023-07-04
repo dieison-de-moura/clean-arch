@@ -29,6 +29,11 @@ export default class Address {
         return this._city;
     }
 
+    changeStreet(value: string): void {
+        this._street = value;
+        this.validate();
+    }
+
     validate() {
         if (this._street.length === 0) {
             throw new Error("Street is required");
