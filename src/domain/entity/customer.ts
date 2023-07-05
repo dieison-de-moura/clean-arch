@@ -1,6 +1,9 @@
 // por padrão, uma entidade deve se auto-validar
 // entidade focada no negócio
 import Address from "../../value-object/address";
+import EventDispatcher from "../event/@shared/event-dispatcher";
+import CustomerAddressChangedEvent from "../event/customer/customer-address-changed.event";
+import SendConsoleLogWhenCustomerAddressIsChangedHandler from "../event/customer/handler/send-console-log-when-customer-address-is-changed.handler";
 
 export default class Customer {
     private _id: string;
@@ -53,6 +56,18 @@ export default class Customer {
 
     changeAddress(address: Address) {
         this._address = address;
+        const eventDispatcher = new EventDispatcher();
+        const eventHandler = new SendConsoleLogWhenCustomerAddressIsChangedHandler();
+
+        eventDispatcher.register("CustomerAddressChangedEvent", eventHandler);
+
+        const customerAddress = {
+            id: this.id,
+            name: this.name,
+            address: this.addressToString(),
+        }
+        const customerAddressChangedEvent = new CustomerAddressChangedEvent(customerAddress);
+        eventDispatcher.notify(customerAddressChangedEvent);
     }
 
     isActive(): boolean {
@@ -76,5 +91,9 @@ export default class Customer {
 
     set Address(address: Address) {
         this._address = address;
+    }
+
+    addressToString(): string {
+        return `${this._address._street}, ${this._address._number}, ${this._address._city} - ${this._address._zip}`;
     }
 }
