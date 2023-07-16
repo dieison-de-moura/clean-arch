@@ -14,14 +14,19 @@ export default class CreateProductUseCase {
     async execute(
         input: InputCreateProductDto
     ): Promise<OutputCreateProductDto> {
-        const product = new Product(uuid(), input.name, input.price);
 
-        await this.productRepository.create(product);
+        try {
+            const product = new Product(uuid(), input.name, input.price);
 
-        return {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-        };
+            await this.productRepository.create(product);
+
+            return {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+            };   
+        } catch (error) {
+            throw new Error(`${error}`);
+        }
     }
 }
