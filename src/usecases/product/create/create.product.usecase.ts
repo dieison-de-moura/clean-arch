@@ -15,18 +15,14 @@ export default class CreateProductUseCase {
         input: InputCreateProductDto
     ): Promise<OutputCreateProductDto> {
 
-        try {
-            const product = new Product(uuid(), input.name, input.price);
+        const product = new Product(uuid(), input.name, input.price);
 
-            await this.productRepository.create(product);
+        await this.productRepository.create(product);
 
-            return {
-                id: product.id,
-                name: product.name,
-                price: product.price,
-            };   
-        } catch (error) {
-            throw new Error(`${error}`);
-        }
+        return {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+        };   
     }
 }
